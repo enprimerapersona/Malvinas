@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <title>Realidad Aumentada - Diorama Malvinas</title>
+    <!-- A-Frame y AR.js -->
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <style>
+      body { margin: 0; overflow: hidden; background-color: #09090c; font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+      
+      /* UI Layer sobre la cámara */
+      #ui-layer { 
+        position: fixed; top: 0; left: 0; right: 0; z-index: 1000; 
+        padding: 1.5rem; display: flex; justify-content: space-between; align-items: flex-start; 
+        background: linear-gradient(180deg, rgba(9,9,12,0.9) 0%, rgba(9,9,12,0) 100%); 
+        pointer-events: none; 
+      }
+      
+      .back-btn { 
+        pointer-events: auto; 
+        background: rgba(255,255,255,0.1); 
+        border: 1px solid rgba(255,255,255,0.2); 
+        color: white; padding: 0.6rem 1.2rem; 
+        border-radius: 999px; text-decoration: none; 
+        font-size: 0.9rem; font-weight: 600; 
+        backdrop-filter: blur(8px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      }
+      
+      .instruction {
+        color: #f0ece5; text-align: right; pointer-events: none;
+      }
+      
+      .instruction .badge {
+        color: #b45354; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;
+      }
+      .instruction .title {
+        font-size: 1.2rem; font-weight: 700; margin-top: 0.2rem;
+      }
+      
+      #scan-hint {
+        position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        color: white; font-weight: bold; background: rgba(0,0,0,0.6); padding: 1rem 2rem; border-radius: 12px;
+        backdrop-filter: blur(4px); pointer-events: none; transition: opacity 0.5s; z-index: 999; text-align: center;
+      }
+      
+      /* Panel de información interactivo */
+      #info-panel { 
+        position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); 
+        background: rgba(9, 9, 12, 0.95); border: 1px solid #35446a; 
+        padding: 1.5rem; border-radius: 16px; color: #f0ece5; 
+        width: 90%; max-width: 500px; display: none; z-index: 1000; 
+        box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+        backdrop-filter: blur(12px);
+      }
+      #info-panel h3 { margin: 0 0 0.5rem 0; color: #7b98ab; font-size: 1.4rem; font-family: Georgia, serif; font-style: italic; }
+      #info-panel p { margin: 0; font-size: 0.95rem; line-height: 1.6; color: #cbd5e1; }
+      #info-panel .close { 
+        position: absolute; top: 15px; right: 20px; color: #fff; cursor: pointer; font-size: 1.2rem; 
+        background: rgba(255,255,255,0.1); width: 30px; height: 30px; border-radius: 50%; 
+        display: flex; align-items: center; justify-content: center;
+      }
+    </style>
+  </head>
+  <body>
+    
+    <div id="ui-layer">
+      <a href="/proyecto-malvinas" class="back-btn">← Volver al Portal</a>
+      <div class="instruction">
+        <div class="badge">Realidad Aumentada</div>
+        <div class="title">Apuntá al marcador HIRO</div>
+      </div>
+    </div>
+    
+    <div id="scan-hint">
+        Buscando Marcador HIRO...<br><span style="font-size: 0.8rem; font-weight: normal;">Asegurate de tener buena iluminación</span>
+    </div>
+
+    <div id="info-panel">
+        <div class="close" onclick="document.getElementById('info-panel').style.display='none'">✕</div>
+        <h3 id="info-title">Título</h3>
+        <p id="info-desc">Descripción</p>
+    </div>
+
+    <script>
+      // Ocultar hint cuando se detecta el marcador
+      AFRAME.registerComponent('markerhandler', {
+        init: function () {
+          this.el.sceneEl.addEventListener('markerFound', () => {
+            document.getElementById('scan-hint').style.opacity = '0';
+          });
+          this.el.sceneEl.addEventListener('markerLost', () => {
+            document.getElementById('scan-hint').style.opacity = '1';
+            document.getElementById('info-panel').style.display = 'none'; // ocultar panel si se pierde
+          });
+        }
+      });
+
+      // Lógica de clics en hotspots
+      AFRAME.registerComponent('hotspot-click', {
+        schema: { title: {type: 'string'}, desc: {type: 'string'}, color: {type: 'string'} },
+        init: function () {
+          this.el.addEventListener('click', () => {
+            const panel = document.getElementById('info-panel');
+            const titleEl = document.getElementById('info-title');
+            titleEl.innerText = this.data.title;
+            titleEl.style.color = this.data.color;
+            document.getElementById('info-desc').innerText = this.data.desc;
+            panel.style.display = 'block';
+          });
+        }
+      });
+    </script>
+
+    <!-- Escena AR.js -->
+    <a-scene 
+      embedded 
+      arjs="sourceType: webcam; debugUIEnabled: false; trackingMethod: best;"
+      renderer="logarithmicDepthBuffer: true; antialias: true;"
+      vr-mode-ui="enabled: false"
+      cursor="rayOrigin: mouse"
+      raycaster="objects: .clickable"
+    >
+      
+      <!-- Diorama anclado al marcador HIRO -->
+      <a-marker preset="hiro" markerhandler>
+        
+        <!-- Agrupamos la imagen y los hotspots -->
+        <a-entity position="0 0.2 0" rotation="-90 0 0">
+            
+            <!-- Imagen inmersiva generada 3D -->
+            <a-image src="/malvinas_diorama_3d.png" position="0 0 0" width="5" height="5" rotation="0 0 0"></a-image>
+
+            <!-- HOTSPOTS (Iconos flotantes interactivos) -->
+            <!-- Bandera -->
+            <a-entity position="0 1 0.5" animation="property: position; to: 0 1.2 0.5; dir: alternate; dur: 2000; loop: true">
+                <a-image class="clickable" src="/ar_icon_bandera.png" width="0.7" height="0.7" material="transparent: true; blending: additive; emissive: #75aadb; emissiveIntensity: 0.3" 
+                          hotspot-click="title: Bandera Argentina; color: #75aadb; desc: El 2 de abril de 1982, las fuerzas argentinas izaron la bandera en Puerto Argentino."></a-image>
+                <a-text value="Bandera" position="0 -0.5 0" align="center" color="#fff" scale="1 1 1"></a-text>
+            </a-entity>
+
+            <!-- Trinchera -->
+            <a-entity position="-1.5 -1 0.5" animation="property: position; to: -1.5 -0.8 0.5; dir: alternate; dur: 2200; loop: true">
+                <a-image class="clickable" src="/ar_icon_trinchera.png" width="0.7" height="0.7" material="transparent: true; blending: additive; emissive: #b45354; emissiveIntensity: 0.3" 
+                          hotspot-click="title: La Trinchera; color: #b45354; desc: Los conscriptos cavaban 'pozos de zorro' en suelo congelado sufriendo hipotermia."></a-image>
+                <a-text value="Trinchera" position="0 -0.5 0" align="center" color="#fff" scale="0.9 0.9 0.9"></a-text>
+            </a-entity>
+
+            <!-- Cartas -->
+            <a-entity position="1.5 -0.5 0.5" animation="property: position; to: 1.5 -0.3 0.5; dir: alternate; dur: 1800; loop: true">
+                <a-image class="clickable" src="/ar_icon_cartas.png" width="0.7" height="0.7" material="transparent: true; blending: additive; emissive: #f0ece5; emissiveIntensity: 0.3" 
+                          hotspot-click="title: Cartas a Casa; color: #f0ece5; desc: Las cartas eran el único canal humano. Muchas no llegaron jamás."></a-image>
+                <a-text value="Cartas" position="0 -0.5 0" align="center" color="#fff" scale="0.9 0.9 0.9"></a-text>
+            </a-entity>
+
+            <!-- Belgrano -->
+            <a-entity position="-0.5 1.8 0.5" animation="property: position; to: -0.5 2 0.5; dir: alternate; dur: 2500; loop: true">
+                <a-image class="clickable" src="/ar_icon_belgrano.png" width="0.7" height="0.7" material="transparent: true; blending: additive; emissive: #1565c0; emissiveIntensity: 0.3" 
+                          hotspot-click="title: Hundimiento del Belgrano; color: #1565c0; desc: Torpedeado fuera de la zona de exclusión. Murieron 323 marinos argentinos."></a-image>
+                <a-text value="Belgrano" position="0 -0.5 0" align="center" color="#fff" scale="0.9 0.9 0.9"></a-text>
+            </a-entity>
+            
+        </a-entity>
+      </a-marker>
+      
+      <a-entity camera></a-entity>
+    </a-scene>
+  </body>
+</html>

@@ -1,0 +1,102 @@
+:root {
+  --primary: #004a99;
+  --primary-light: #0066cc;
+  --accent: #e6f0ff;
+  --bg: #ffffff;
+  --text: #2c3e50;
+  --text-light: #5a6c7d;
+  --border: #e2e8f0;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.6;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+/* ── Mobile responsive overrides ─────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Prevent horizontal overflow on all pages */
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  /* Force ALL grid displays to single column on narrow screens */
+  div[style*="grid"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Reduce padding on large containers */
+  div[style*="padding: 4rem"],
+  div[style*="padding: 5rem"],
+  div[style*="padding: 3rem"],
+  section[style*="padding: 5rem"],
+  section[style*="padding: 4rem"] {
+    padding: 1.5rem !important;
+    border-radius: 25px !important;
+  }
+
+  /* Prevent fixed-width images from overflowing */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Ensure quiz buttons don't overflow */
+  button {
+    max-width: 100%;
+    word-break: break-word;
+  }
+
+  /* Prevent flex rows from overflowing */
+  div[style*="display: flex"] {
+    flex-wrap: wrap !important;
+  }
+
+  /* Fixed-width elements must not exceed viewport */
+  div[style*="width: 250px"],
+  div[style*="minWidth"],
+  div[style*="min-width"] {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Even smaller screens */
+  h1 {
+    font-size: clamp(1.5rem, 7vw, 2.5rem) !important;
+  }
+  h2 {
+    font-size: clamp(1.3rem, 5vw, 2rem) !important;
+  }
+}
