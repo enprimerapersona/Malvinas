@@ -247,7 +247,7 @@ const Home = () => {
 
                 {/* HERO */}
                 <header style={{
-                    background: `linear-gradient(180deg, rgba(9,9,12,0.85) 0%, rgba(53,68,106,0.95) 100%), url('/malvinas_hero.png')`,
+                    background: `linear-gradient(180deg, rgba(9,9,12,0.85) 0%, rgba(53,68,106,0.95) 100%), url(${import.meta.env.BASE_URL}malvinas_hero.png)`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     color: COLORS.paper,
@@ -377,21 +377,21 @@ const Home = () => {
                     </h3>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
                         <div style={{ position: 'relative', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}>
-                            <img src="/malvinas_carta.png" alt="El conscripto escribiendo desde la trinchera" style={{ width: '100%', height: '240px', objectFit: 'cover', display: 'block' }} />
+                            <img src={`${import.meta.env.BASE_URL}malvinas_carta.png`} alt="El conscripto escribiendo desde la trinchera" style={{ width: '100%', height: '240px', objectFit: 'cover', display: 'block' }} />
                             <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '1rem', background: 'linear-gradient(to top, rgba(9,9,12,0.9), transparent)', color: COLORS.paper }}>
                                 <p style={{ margin: 0, fontWeight: 700, fontSize: '0.9rem' }}>Perspectiva inmersiva</p>
                                 <p style={{ margin: 0, fontSize: '0.75rem', opacity: 0.8 }}>Viviendo las decisiones desde las trincheras.</p>
                             </div>
                         </div>
                         <div style={{ position: 'relative', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}>
-                            <img src="/malvinas_activacion.png" alt="Despliegue y acción" style={{ width: '100%', height: '240px', objectFit: 'cover', display: 'block' }} />
+                            <img src={`${import.meta.env.BASE_URL}malvinas_activacion.png`} alt="Despliegue y acción" style={{ width: '100%', height: '240px', objectFit: 'cover', display: 'block' }} />
                             <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '1rem', background: 'linear-gradient(to top, rgba(9,9,12,0.9), transparent)', color: COLORS.paper }}>
                                 <p style={{ margin: 0, fontWeight: 700, fontSize: '0.9rem' }}>Clima y tensión</p>
                                 <p style={{ margin: 0, fontSize: '0.75rem', opacity: 0.8 }}>Escenarios reconstruidos mediante IA para ilustrar la dureza del clima.</p>
                             </div>
                         </div>
                         <div style={{ position: 'relative', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}>
-                            <img src="/malvinas_collage.png" alt="Decisiones narrativas" style={{ width: '100%', height: '240px', objectFit: 'cover', display: 'block' }} />
+                            <img src={`${import.meta.env.BASE_URL}malvinas_collage.png`} alt="Decisiones narrativas" style={{ width: '100%', height: '240px', objectFit: 'cover', display: 'block' }} />
                             <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '1rem', background: 'linear-gradient(to top, rgba(9,9,12,0.9), transparent)', color: COLORS.paper }}>
                                 <p style={{ margin: 0, fontWeight: 700, fontSize: '0.9rem' }}>Mosaico de rutas</p>
                                 <p style={{ margin: 0, fontSize: '0.75rem', opacity: 0.8 }}>Múltiples desenlaces basados en las decisiones del alumno.</p>

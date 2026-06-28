@@ -386,11 +386,11 @@ const Diorama3D = () => {
                             </p>
                             
                             <div style={{ background: '#fff', padding: '1rem', borderRadius: '16px', display: 'inline-block', marginBottom: '2rem', boxShadow: '0 10px 40px rgba(0,0,0,0.5)' }}>
-                                <img src="/malvinas_ar_anchor.png" alt="Marcador HIRO" style={{ width: '280px', height: '280px', objectFit: 'contain', display: 'block' }} />
+                                <img src={`${import.meta.env.BASE_URL}malvinas_ar_anchor.png`} alt="Marcador HIRO" style={{ width: '280px', height: '280px', objectFit: 'contain', display: 'block' }} />
                             </div>
 
                             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-                                <a href="/malvinas_ar_anchor.png" download="Marcador_HIRO_Malvinas.png" style={{ textDecoration: 'none', background: COLORS.paper, color: COLORS.base, fontWeight: 700, padding: '0.75rem 1.5rem', borderRadius: '999px', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <a href={`${import.meta.env.BASE_URL}malvinas_ar_anchor.png`} download="Marcador_HIRO_Malvinas.png" style={{ textDecoration: 'none', background: COLORS.paper, color: COLORS.base, fontWeight: 700, padding: '0.75rem 1.5rem', borderRadius: '999px', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                     <Download size={18} /> Descargar Marcador
                                 </a>
                                 <a href="/ar_malvinas.html" style={{ textDecoration: 'none', background: '#3b82f6', color: COLORS.paper, fontWeight: 700, padding: '0.75rem 1.5rem', borderRadius: '999px', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
