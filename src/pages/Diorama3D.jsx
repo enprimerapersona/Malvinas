@@ -1,4 +1,5 @@
 import React, { Suspense, useRef, useState, useEffect } from 'react';
+import * as THREE from 'three';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Text, Html, Stars, useGLTF, useProgress } from '@react-three/drei';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -114,27 +115,54 @@ const Loader = () => {
 };
 
 // Componente dinámico para renderizar el modelo seleccionado
+// Auto-centra y auto-escala dinámicamente cualquier modelo cargado basándose en su Bounding Box
 const ModelRenderer = ({ model }) => {
     const { scene } = useGLTF(`${import.meta.env.BASE_URL}models/${model.path}`);
-    const clonedScene = React.useMemo(() => scene.clone(), [scene]);
-    return <primitive object={clonedScene} scale={model.scale} position={[0, -0.8, 0]} castShadow receiveShadow />;
+    
+    const clonedScene = React.useMemo(() => {
+        const clone = scene.clone();
+        
+        // Calcular la caja delimitadora (Bounding Box)
+        const box = new THREE.Box3().setFromObject(clone);
+        const center = new THREE.Vector3();
+        box.getCenter(center);
+        
+        const size = new THREE.Vector3();
+        box.getSize(size);
+        
+        // Centrar las geometrías en [0, 0, 0]
+        clone.position.x += (clone.position.x - center.x);
+        clone.position.y += (clone.position.y - center.y);
+        clone.position.z += (clone.position.z - center.z);
+        
+        // Escalar de forma proporcional para que encaje perfectamente en el viewport
+        const maxDim = Math.max(size.x, size.y, size.z);
+        const targetSize = 2.8; // Tamaño objetivo adecuado en el Canvas
+        const scaleFactor = targetSize / (maxDim || 1);
+        
+        // Aplicar la escala combinada con el modificador específico del modelo
+        clone.scale.setScalar(scaleFactor * model.scale);
+        
+        return clone;
+    }, [scene, model]);
+
+    return <primitive object={clonedScene} castShadow receiveShadow />;
 };
 
-// Niebla y atmósfera
+// Niebla y atmósfera de estudio para fondo claro
 const Atmosphere = () => (
     <>
-        <fog attach="fog" args={[COLORS.base, 8, 25]} />
-        <ambientLight intensity={0.5} />
+        <fog attach="fog" args={['#ffffff', 8, 25]} />
+        <ambientLight intensity={0.8} />
         <directionalLight
-            position={[5, 8, 5]}
-            intensity={0.8}
-            color="#bcd0e0"
+            position={[5, 10, 5]}
+            intensity={1.2}
+            color="#ffffff"
             castShadow
-            shadow-mapSize-width={1024}
-            shadow-mapSize-height={1024}
+            shadow-mapSize-width={2048}
+            shadow-mapSize-height={2048}
         />
-        <pointLight position={[-5, 3, -5]} color={COLORS.accent} intensity={0.5} />
-        <Stars radius={50} depth={20} count={1500} factor={2} fade />
+        <pointLight position={[-5, 4, -5]} color="#ffffff" intensity={0.5} />
     </>
 );
 
@@ -185,7 +213,7 @@ const Diorama3D = () => {
                     camera={{ position: [0, 2.5, 6.5], fov: 45 }}
                     style={{ width: '100%', height: '100%' }}
                 >
-                    <color attach="background" args={[COLORS.base]} />
+                    <color attach="background" args={['#ffffff']} />
                     <Suspense fallback={<Loader />}>
                         <Atmosphere />
                         {/* Render active model in carousel */}
