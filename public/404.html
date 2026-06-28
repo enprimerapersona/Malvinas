@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Malvinas en Primera Persona</title>
+    <script>
+      // GitHub Pages SPA hack
+      // Encodes the path/query/hash into a query param before redirecting to index.html
+      // so the app can restore the correct route on load.
+      var segmentCount = 1; // number of path segments in the repo name (1 for /malvinas/)
+      var l = window.location;
+      l.replace(
+        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+        l.pathname.split('/').slice(0, 1 + segmentCount).join('/') + '/?p=/' +
+        l.pathname.split('/').slice(1 + segmentCount).join('/').replace(/&/g, '~and~') +
+        (l.search ? '&q=' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+        l.hash
+      );
+    </script>
+  </head>
+  <body></body>
+</html>
