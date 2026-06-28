@@ -825,18 +825,18 @@ const SCENES = {
         chapter: 'Prólogo', title: 'Otoño 1982 · Buenos Aires',
         text: 'Tenés 18 años. Acabás de empezar el Servicio Militar Obligatorio en Campo de Mayo y tu mundo no es más grande que las calles de tu barrio. Una mañana de abril, de forma abrupta, anuncian por altavoz: "Hoy todos los conscriptos forman para una misión especial". Te entregan un casco verde demasiado pesado, un fusil FAL viejo con la correa gastada, y un boleto de avión hacia un sur helado que apenas conocés de los mapas escolares.\n\nEl sargento te grita el apellido rompiendo el silencio. Hay nervios palpables pero también un orgullo confuso flotando en el aire. Algunos compañeros se ríen para no dejar escapar el llanto. Tu cuerpo, tenso y congelado, todavía no termina de entender hacia qué abismo te están empujando.',
         choices: [
-            { label: 'Subo al avión sin preguntar. Cumplo mi deber.', next: 'casa_familia', effects: { miedo: +1, conviccion: +2 } },
+            { label: 'Subo al avión sin preguntar.', next: 'casa_familia', effects: { miedo: +1, conviccion: +2 } },
             { label: 'Le pregunto al sargento a dónde vamos exactamente.', next: 'pregunta_sgto', effects: { miedo: 0, conviccion: +1, info: +2 } },
-            { label: 'Intento avisarle a mi mamá antes de partir.', next: 'casa_familia', effects: { miedo: +2, empatia: +1, conviccion: -1 } }
+            { label: 'Intento avisarle a mi familia antes de partir.', next: 'casa_familia', effects: { miedo: +2, empatia: +1, conviccion: -1 } }
         ]
     },
     casa_familia: {
         img: `${import.meta.env.BASE_URL}malvinas_casa.png`, mood: 'home', day: 0,
         chapter: '0', title: 'La cena que no fue',
-        text: 'Esa noche, mientras esperás el llamado a la formación final, te acordás de la última cena del domingo. Mamá había hecho milanesas con puré. Tu hermana chica te contaba un chiste de la escuela y vos no te reíste porque ya estabas pensando en el cuartel.\n\nAhora, sentado en el catre, con la mochila a tus pies, te das cuenta: no le diste el beso de despedida. No te despediste de tu perro. No le respondiste el último mensaje a tu novia.\n\nMañana muy temprano partís en avión.',
+        text: 'Esa noche, mientras esperás el llamado a la formación final, te acordás de la última cena del domingo. Mamá había hecho milanesas con puré. Tu hermana chica te contaba un chiste de la escuela y vos no te reíste porque ya estabas pensando en el cuartel.\n\nAhora, sentado en el catre, con la mochila a tus pies, te das cuenta: no le diste el beso de despedida. No te despediste de tu perro como querías. No le escribiste una notita a tu novia. Mañana muy temprano partís en avión.',
         choices: [
             { label: 'Escribo una carta breve y le pido al cabo que la envíe.', next: 'avion', effects: { empatia: +3, salud: +1 } },
-            { label: 'Cierro los ojos. Pienso en mamá calentándome la leche.', next: 'avion', effects: { empatia: +2, miedo: +1 } },
+            { label: 'Cierro los ojos. Pienso en mamá preparando la comida.', next: 'avion', effects: { empatia: +2, miedo: +1 } },
             { label: 'Me prometo volver vivo para terminar lo que dejé sin terminar.', next: 'avion', effects: { conviccion: +3, salud: +1 } }
         ]
     },
@@ -854,7 +854,7 @@ const SCENES = {
         img: `${import.meta.env.BASE_URL}malvinas_avion.png`,
         mood: 'tense', day: 1,
         chapter: '1', title: 'Vuelo al sur',
-        text: 'El Hércules está repleto, sofocante y ensordecedor. Sus gigantescas turbinas hacen vibrar cada centímetro de chapa del fuselaje, metiéndose en los huesos. Los muchachos, tratando de espantar el silencio, cantan la Marcha de Malvinas a todo pulmón; algunos ya van por la quinta vez. Hay risas nerviosas, bromas pesadas para disimular la ansiedad, y un suboficial en el rincón que reza apretando un rosario.\n\nMirás por la pequeña ventanilla circular y descubrís, a través de un denso colchón de nubes blancas, la inmensidad del Atlántico Sur: oscuro, profundo e infinito. Algunos en este avión jamás habían salido de los límites de su provincia. Muchos jamás habían visto la nieve o sentido verdadero frío. Demasiados no van a tener la oportunidad de volver.\n\nUn cabo te reparte de prisa una hoja de papel en blanco. "Si querés escribirle unas últimas líneas a tu vieja, hacelo ahora. Allá, en el barro, después no se va a poder".',
+        text: 'El Hércules está repleto, sofocante y ensordecedor. Sus gigantescas turbinas hacen vibrar cada centímetro de chapa del fuselaje, metiéndose en los huesos. Los muchachos, tratando de espantar el silencio, cantan la Marcha de Malvinas a todo pulmón; algunos ya van por la quinta vez. Hay risas nerviosas, bromas pesadas para disimular la ansiedad, y un suboficial en el rincón que reza apretando un rosario. Mirás por la pequeña ventanilla circular y descubrís, a través de un denso colchón de nubes blancas, la inmensidad del Atlántico Sur: oscuro, profundo e infinito. Algunos en este avión jamás habían salido de los límites de su provincia. Muchos jamás habían visto la nieve o sentido verdadero frío.\n\nUn cabo te reparte de prisa una hoja de papel en blanco. "Si querés escribirle unas últimas líneas a tu vieja, hacelo ahora. A donde vamos, después no se va a poder."',
         choices: [
             { label: 'Escribo: "No te preocupes mami, vuelvo pronto."', next: 'islas', effects: { empatia: +2 } },
             { label: 'Escribo todo lo que siento: el miedo, la nieve, la lejanía.', next: 'islas', effects: { empatia: +3, miedo: +2 } },
@@ -865,7 +865,7 @@ const SCENES = {
         img: `${import.meta.env.BASE_URL}malvinas_llegada.png`,
         mood: 'cold', day: 2,
         chapter: '2', title: 'Puerto Argentino',
-        text: 'Al bajar la rampa del avión, el viento te corta la cara como si te hubieran tirado un balde de cuchillos. Hace 2°C. Llovizna helada y horizontal. Todo huele a turba húmeda y a combustible JP-1 derramado.\n\nTu sección es asignada a defender el Monte Tumbledown, un cerro pelado al oeste de Puerto Argentino. La orden es clara y categórica: hay que cavar pozos de zorro en la piedra. Los ingleses van a venir desde el mar; hay que esperarlos.\n\nUn cabo veterano te muestra el suelo: "Pico, pala, paciencia. Y cuidado con el agua subterránea."',
+        text: 'Al bajar la rampa del avión, el viento te corta la cara como si te hubieran tirado un balde de cuchillos. Hace 2°C. Llovizna helada y horizontal. Todo huele a turba húmeda y al combustible de los aviones. Tu sección es asignada a defender el Monte Tumbledown, un cerro pelado al oeste de Puerto Argentino. La orden es clara y categórica: hay que cavar pozos de zorro en la piedra. Los ingleses van a venir desde el mar; hay que esperarlos.\n\nUn cabo veterano te muestra el suelo: "Pico, pala, paciencia. Y cuidado con el agua subterránea."',
         info: 'El suelo malvinense es turbera: retiene el agua y al cavar trincheras ("pozos de zorro"), el agua subterránea inundaba el foso. Los soldados vivían empapados a temperaturas bajo cero, lo que provocó miles de casos de pie de trinchera y congelamientos.',
         choices: [
             { label: 'Pico la piedra rápido para armar una buena defensa.', next: 'guardia_nocturna', effects: { conviccion: +2, hambre: +1 } },
@@ -876,10 +876,10 @@ const SCENES = {
     guardia_nocturna: {
         img: `${import.meta.env.BASE_URL}malvinas_guardia.png`, mood: 'cold', day: 3,
         chapter: '3', title: 'Primera Guardia',
-        text: '2 AM. Tu turno de vigilancia. Estás solo en la intemperie. La humedad se cuela por los puños del capote y se mete en los huesos. La campera militar de mala calidad parece de papel mojado.\n\nA lo lejos escuchás el cañoneo naval británico contra la pista del aeropuerto. Cada estallido te hace temblar el suelo bajo las botas. Mirás las estrellas: en Buenos Aires nunca se veían tantas. Acá sí. Acá brillan como si fueran clavos en el techo del mundo.\n\nIntentás recordar el olor del café con leche de tu casa pero no lo lográs. El frío borra los olores antes que los recuerdos.',
+        text: '2 AM. Tu turno de vigilancia. Estás solo en la intemperie. La humedad se cuela por los puños del capote y se mete en los huesos. La ropa permanece mojada por la lluvia, el viento y la humedad constante, y el frío no da tregua. A lo lejos escuchás el cañoneo naval británico contra la pista del aeropuerto. Cada estallido te hace temblar el suelo bajo las botas. Mirás las estrellas: en Buenos Aires nunca se veían tantas. Acá sí. Acá brillan como si fueran clavos en el techo del mundo. Intentás recordar el olor del café con leche de tu casa pero no lo lográs. El frío borra los olores antes que los recuerdos.',
         choices: [
             { label: 'Abrazo mi fusil para tratar de no temblar.', next: 'amigo', effects: { frio: +2, miedo: +2 } },
-            { label: 'Me pongo a pensar en la cocina caliente de mi casa.', next: 'amigo', effects: { empatia: +1, frio: +2, hambre: +1 } },
+            { label: 'Me pongo a pensar en mis abuelos.', next: 'amigo', effects: { empatia: +1, frio: +2, hambre: +1 } },
             { label: 'Intento mantener la visión enfocada en el horizonte.', next: 'amigo', effects: { conviccion: +1, frio: +1 } }
         ]
     },
@@ -889,7 +889,7 @@ const SCENES = {
         text: 'Al día siguiente descubrís que tu compañero de pozo es Ramón Antúnez, de un pueblo cerca de Goya, Corrientes. Tiene 19 años, una hermana enferma y una novia llamada Alicia que le tejió tres pulóveres de lana gruesa. "Pero no me dejaron traer ni uno", te cuenta riéndose para no llorar.\n\nA la noche, Ramón saca un transistor a pilas que escondió en la mochila bajo unas medias. Sintoniza onda corta. La señal viene y va con el viento. Una voz seca dice algo en inglés. Después llega un acento uruguayo: "Versión británica indica que el avance hacia Puerto Argentino es sostenido."',
         info: 'Para contrarrestar la censura del gobierno dictatorial argentino que insistía con "Estamos ganando", muchos soldados sintonizaban radios uruguayas (Radio Carve de Montevideo era muy escuchada) o la propia BBC para entender la realidad del terreno.',
         choices: [
-            { label: 'Sintonizo radio de Argentina. Necesito buenas noticias.', next: 'oficial_humano', effects: { conviccion: +2, info: -2 } },
+            { label: 'Sintonizo radio de Argentina. Quiero saber qué dicen.', next: 'oficial_humano', effects: { conviccion: +2, info: -2 } },
             { label: 'Sintonizo una radio de afuera (BBC/Uruguay).', next: 'oficial_humano', effects: { conviccion: -1, info: +3, miedo: +1 } },
             { label: 'Apago la radio. No me importa lo que digan allá lejos.', next: 'oficial_humano', effects: { empatia: +1 } }
         ]
@@ -929,7 +929,7 @@ const SCENES = {
     ataque_aereo_previo: {
         img: `${import.meta.env.BASE_URL}malvinas_collage.png`, mood: 'battle', day: 50,
         chapter: '6', title: 'Fuego naval',
-        text: 'Mayo avanza. Los británicos desembarcan en San Carlos el 21. Avanzan lento pero seguros. Las noches se vuelven una pesadilla de hierro: barcos británicos disparan andanadas de cañón naval sobre las posiciones argentinas para quebrar la moral y no dejarlos dormir.\n\nLos proyectiles silban sobre el techo de la trinchera. Cada uno suena como un tren cayendo del cielo. Algunos explotan a metros, otros a kilómetros. Nunca sabés cuál te va a tocar.\n\nRamón te aprieta el brazo. No habla. Tiene los ojos cerrados y la boca apretada. Vos sentís el corazón en las orejas.',
+        text: 'Mayo avanza. Los británicos desembarcan en San Carlos el 21. Avanzan lento pero seguros. Las noches se vuelven una pesadilla de hierro: barcos británicos disparan andanadas de cañón naval sobre las posiciones argentinas para quebrar la moral y no dejarlos dormir. Los proyectiles silban sobre el techo de la trinchera. Cada uno suena como un tren cayendo del cielo. Algunos explotan a metros, otros a kilómetros. Nunca sabés cuál te va a tocar. Ramón te aprieta el brazo. No habla. Tiene los ojos cerrados y la boca apretada. Vos sentís el corazón en las orejas.\n\nUno de los pibes intenta aliviar el miedo con una frase que ya todos repiten: "Metete donde ya cayó una... dos veces en el mismo lugar no caen". Nadie sabe si es verdad, pero por un instante alcanza para aflojar la tensión.',
         choices: [
             { label: 'Tapo mis oídos y rezo.', next: 'paramedico', effects: { miedo: +3 } },
             { label: 'Me asomo para intentar ver de dónde disparan.', next: 'paramedico', effects: { conviccion: +2, miedo: +1 } },
@@ -959,11 +959,12 @@ const SCENES = {
     },
     medios: {
         img: `${import.meta.env.BASE_URL}malvinas_medios.png`, mood: 'tense', day: 65,
-        chapter: '8', title: 'Revistas del continente',
-        text: 'En la sala de espera del hospital ves una pila de revistas "Gente" llegada en un Hércules de logística. La tapa muestra a una madre sonriente con la foto de su hijo conscripto. El título grita en mayúsculas: "ESTAMOS GANANDO".\n\nAdentro hay listas de donaciones millonarias: golosinas, abrigos, cigarrillos, chocolates. Toneladas. Vos no comiste un chocolate en treinta días.\n\nUn compañero, sentado al lado tuyo, abre la revista. Lee los nombres. Después la cierra y mira al vacío. "Mi vieja debe estar leyendo esto ahora mismo en el living", dice.',
+        chapter: '8', title: 'Estamos ganando',
+        text: 'En la sala de espera del hospital ves una pila de revistas "Gente" llegada en un Hércules de logística. La tapa dice "ESTAMOS GANANDO". Adentro hay listas de donaciones millonarias: golosinas, abrigos, cigarrillos, chocolates. Toneladas. Vos no comiste un chocolate en treinta días.\n\nUn compañero, sentado al lado tuyo, abre la revista. Lee los nombres. Después la cierra y mira al vacío. "Mi vieja debe estar leyendo esto ahora mismo en el comedor", dice.',
+        info: 'La Junta Militar ejerció un fuerte control sobre la información difundida por los medios de comunicación. La censura y la propaganda oficial buscaban sostener el apoyo de la población y mantener alta la moral, por lo que diarios, revistas y noticieros difundieron mensajes optimistas bajo consignas como "Estamos ganando", aun cuando la situación militar en las islas era cada vez más desfavorable.',
         choices: [
-            { label: 'Lloro de impotencia. Alguien nos mintió todo este tiempo.', next: 'final_ataque', effects: { info: +3, miedo: +1 } },
-            { label: 'Tiro la revista. Acá la única verdad es el plomo que viene.', next: 'final_ataque', effects: { conviccion: +1, empatia: -1 } },
+            { label: 'Lloro de impotencia. No entiendo por qué mienten.', next: 'final_ataque', effects: { info: +3, miedo: +1 } },
+            { label: 'Tiro la revista. Solo nosotros sabemos la verdad.', next: 'final_ataque', effects: { conviccion: +1, empatia: -1 } },
             { label: 'Guardo una página para mostrarle a mi familia cuando vuelva.', next: 'final_ataque', effects: { info: +2, conviccion: +2 } }
         ]
     },
@@ -972,6 +973,7 @@ const SCENES = {
         chapter: '9', title: 'La Batalla Final',
         text: 'Noche del 13 al 14 de junio de 1982. Monte Longdon, Dos Hermanas y Tumbledown caen uno tras otro. Todo es fuego intenso, bengalas británicas que iluminan los cerros como si fuera mediodía blanco, gritos en dos idiomas, disparos que pasan zumbando.\n\nVos y Ramón están atrincherados con el último cargador. A 200 metros se escucha la respiración del enemigo entre las piedras. Un compañero al lado tuyo grita "¡Viva la Patria!". Otro reza. Otro llora. Otro hace todas esas cosas a la vez.\n\nLa orden por radio es clara: aguantar hasta el último cartucho. Nadie te dice qué hacer después.',
         info: 'Los enfrentamientos cuerpo a cuerpo en los cerros perimetrales fueron de altísima intensidad. Algunos grupos resistieron hasta agotar municiones contra tropas de élite paracaidistas británicas que avanzaban en la noche con visión nocturna. Por la madrugada del 14 quedó claro que la posición era insostenible.',
+
         choices: [
             { label: 'Soporto la posición y devuelvo el fuego hasta el final.', next: 'rendicion', effects: { conviccion: +4, miedo: +3 } },
             { label: 'Trato de replegar al grupo a una posición segura.', next: 'rendicion', effects: { empatia: +2, info: +2 } },
@@ -981,11 +983,11 @@ const SCENES = {
     rendicion: {
         img: `${import.meta.env.BASE_URL}malvinas_rendicion.png`, mood: 'cold', day: 74,
         chapter: '10', title: 'La rendición',
-        text: 'Humo blanco sobre Puerto Argentino. La orden es romper las armas y rendirse. Vos rompés el cerrojo de tu fusil contra una roca. El golpe seco te suena como el cierre de un libro.\n\nEl General Menéndez firma la capitulación a las 23:30 horas. Caminás hacia el galpón gris donde te van a registrar como prisionero de guerra. Hay miles. Pibes mojados, sucios, hambrientos, callados. Un teniente inglés joven, casi de tu edad, te ofrece un cigarrillo. Lo aceptás.\n\nTerminó. 74 días que cambiaron para siempre quién eras.',
+        text: 'Humo blanco sobre Puerto Argentino. La orden es romper las armas y rendirse. Vos rompés el cerrojo de tu fusil contra una roca. El golpe seco te suena como el cierre de un libro.\n\nSe confirma el alto el fuego y llega la orden de entregar las armas. Caminás hacia el galpón gris donde te van a registrar como prisionero de guerra. Hay miles de pibes mojados, sucios, hambrientos, callados. Un teniente inglés joven, casi de tu edad, te ofrece un cigarrillo. Lo aceptás. 74 días que cambiaron para siempre quién eras.',
         info: 'Saldo del conflicto: 649 caídos argentinos, 255 británicos y 3 isleños. Los conscriptos argentinos fueron capturados, registrados en el Boletín de Cautivos y devueltos al continente en barcos transatlánticos como el Canberra y vuelos comerciales fletados.',
         choices: [
             { label: 'Cierro los ojos, respiro la paz de estar vivo.', next: 'prisionero', effects: { empatia: +1, salud: +1 } },
-            { label: 'Siento vergüenza de haber perdido.', next: 'prisionero', effects: { conviccion: -2, miedo: +1 } },
+            { label: 'Siento vergüenza.', next: 'prisionero', effects: { conviccion: -2, miedo: +1 } },
             { label: 'Juro que nadie los va a olvidar.', next: 'prisionero', effects: { info: +3, conviccion: +2 } }
         ]
     },
@@ -1009,7 +1011,7 @@ const SCENES = {
     regreso: {
         img: `${import.meta.env.BASE_URL}malvinas_hero.png`, mood: 'tense', day: 90,
         chapter: 'Epílogo', title: 'La vuelta del silencio',
-        text: 'Desembarcan en Puerto Madryn una madrugada, a escondidas. El gobierno teme que los argentinos vean en sus propios ojos lo que pasó. No hay banderas, no hay diarios, no hay aplausos. Hay micros sin parar y rutas vacías hasta Bahía Blanca.\n\nEn casa, tu mamá dejó tu cama tendida intacta los 74 días. Pero esa misma semana, los vecinos cruzan a la otra vereda cuando te ven. La frase "héroe de Malvinas" tarda 25 años en pronunciarse en voz alta.\n\nLos primeros años son los del olvido oficial: la "desmalvinización". Te ofrecen un trabajo en una panadería; el dueño te dice "que lo de Malvinas no se diga acá, ¿no?". Te quedan los amigos del CECIM y las cartas de Ramón desde Corrientes.',
+        text: 'Desembarcan en Puerto Madryn una madrugada. El regreso se hace con discreción y bajo un fuerte control militar. Mientras esperan el traslado, los vecinos empiezan a acercarse espontáneamente. Les alcanzan pan, café, leche caliente, ropa y abrazos. Muchos de ustedes comen una comida caliente por primera vez en semanas. Ese gesto solidario queda grabado para siempre en tu memoria.\n\nDespués llegan los micros. El viaje continúa en silencio hacia Bahía Blanca. En casa, tu mamá dejó tu cama tendida intacta los 74 días. Pero esa misma semana, algunos vecinos cruzan a la otra vereda cuando te ven. Los primeros años son los del olvido oficial: la "desmalvinización". Te ofrecen un trabajo en una panadería; el dueño te dice: "Que lo de Malvinas no se diga acá, ¿sí?". Con el tiempo, encontrás apoyo en los compañeros con los que compartiste la colimba en Campo de Mayo y mantenés el contacto con Ramón a través de cartas desde Corrientes.',
         memories: (path, stats) => {
             const lines = [];
             if (path.some(p => p.label.includes('Escribo una carta breve'))) lines.push('Tu mamá te muestra la carta que escribiste antes de partir: la guardó en una caja de zapatos junto al escapulario y una foto del perro. Está abierta, abierta, abierta. La leyó cien veces.');
@@ -1030,7 +1032,7 @@ const SCENES = {
     reencuentro: {
         img: `${import.meta.env.BASE_URL}malvinas_soldado_reflexion.png`, mood: 'reunion', day: null,
         chapter: 'Epílogo II', title: '10 años después',
-        text: 'Año 1992. La inmensa plaza San Martín de Buenos Aires está iluminada débilmente por cientos de velitas que parpadean contra el viento. Es el décimo aniversario. Ramón viajó desde su pueblo en Corrientes en un colectivo destartalado de 18 horas de viaje solo para verte. Te abraza fuerte, con esa fuerza bruta que solo se aprende en la guerra. Te presenta a su hija pequeña: la llamó Malvina, y la sostiene orgulloso en brazos.\n\n"Pibe...", te murmura apretando su frente contra la tuya, con los ojos vidriosos. "Volveríamos a ese frío maldito mil veces... si fuera para abrazarnos de nuevo".\n\nEn la plaza brillan exactamente 649 velitas silenciosas. Una por cada compañero que se quedó haciendo guardia eterna en el sur. La velita de Sosa, el chico de Tucumán, está justo en el centro. La encendiste vos con las manos temblando. Ramón te aprieta el hombro. Una llovizna fina y fría comienza a caer sobre la ciudad, pero nadie en la plaza se mueve un solo centímetro.',
+        text: 'Año 1992, diez años después de la guerra. La inmensa plaza San Martín de Buenos Aires está iluminada débilmente por cientos de velitas que parpadean contra el viento. Ramón viajó desde su pueblo en Corrientes en un colectivo destartalado de 18 horas de viaje solo para verte. Te abraza fuerte, con esa fuerza bruta que solo se aprende en la guerra. Te presenta a su hija pequeña: la llamó Soledad, y la sostiene orgulloso en brazos.\n\n"Pibe...", te murmura apretando su frente contra la tuya, con los ojos vidriosos. "Volveríamos a ese frío maldito mil veces... si fuera para abrazarnos de nuevo".\n\nEn la plaza brillan exactamente 649 velitas silenciosas. Una por cada compañero que se quedó haciendo guardia eterna en el sur. La velita de Sosa, el chico de Tucumán, está justo en el centro. La encendiste vos con las manos temblando. Ramón te aprieta el hombro. Una llovizna fina y fría comienza a caer sobre la ciudad, pero nadie en la plaza se mueve un solo centímetro.',
         memories: (path, stats) => {
             const lines = [];
             if (path.some(p => p.label.includes('Me sumo al CECIM'))) lines.push('Mirás alrededor: media plaza son compañeros del CECIM. Vos los trajiste a muchos. Acompañaste sus papeles, sus pensiones, sus crisis. Esta plaza la armaste un poco vos.');
@@ -1048,7 +1050,7 @@ const SCENES = {
         chapter: '1', title: 'Sin opción', mood: 'tense', day: 0,
         text: 'No hay teléfono fijo libre y hay orden estricta de no difundir movimientos de tropas. La fila al único teléfono público es de cien personas. Tu mamá no se entera hasta tres días después cuando lo dicen por cadena nacional.',
         choices: [
-            { label: 'Subir al avión con angustia contenida.', next: 'avion', effects: { miedo: +1, salud: -1 } }
+            { label: 'Lo único que quiero es encontrarme con los que amo.', next: 'avion', effects: { miedo: +1, salud: -1 } }
         ]
     }
 };
