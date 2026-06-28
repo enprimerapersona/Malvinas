@@ -52,26 +52,33 @@ const MODELS = [
     }
 ];
 
-// Loader component
-const Loader = () => {
-    const { active, progress } = useProgress();
+// Loader component (se renderiza fuera del Canvas para evitar conflictos de montaje)
+const Loader = ({ active, progress }) => {
     if (!active) return null;
     return (
-        <Html center>
+        <div style={{
+            position: 'fixed',
+            top: 0, left: 0, right: 0, bottom: 0,
+            background: 'rgba(9,9,12,0.96)',
+            zIndex: 1000,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            fontFamily: '"Public Sans", sans-serif'
+        }}>
             <div style={{
-                background: 'rgba(9,9,12,0.95)',
-                backdropFilter: 'blur(20px)',
+                background: 'rgba(255,255,255,0.03)',
+                border: '1px solid rgba(255,255,255,0.1)',
+                backdropFilter: 'blur(16px)',
                 padding: '2.5rem',
                 borderRadius: '24px',
-                border: `1px solid ${COLORS.deep}`,
                 color: COLORS.paper,
                 textAlign: 'center',
                 minWidth: '320px',
                 boxShadow: '0 20px 50px rgba(0,0,0,0.8)',
                 display: 'flex',
                 flexDirection: 'column',
-                alignItems: 'center',
-                zIndex: 1000
+                alignItems: 'center'
             }}>
                 <div style={{
                     fontSize: '0.75rem',
@@ -110,7 +117,7 @@ const Loader = () => {
                     Cargando recursos interactivos...
                 </div>
             </div>
-        </Html>
+        </div>
     );
 };
 
@@ -119,34 +126,27 @@ const Loader = () => {
 const ModelRenderer = ({ model }) => {
     const { scene } = useGLTF(`${import.meta.env.BASE_URL}models/${model.path}`);
     
-    const clonedScene = React.useMemo(() => {
-        const clone = scene.clone();
-        
-        // Calcular la caja delimitadora (Bounding Box)
-        const box = new THREE.Box3().setFromObject(clone);
-        const center = new THREE.Vector3();
-        box.getCenter(center);
+    // Calcular centro y escala proporcional sólo una vez al cargar la escena
+    const { center, scale } = React.useMemo(() => {
+        const box = new THREE.Box3().setFromObject(scene);
+        const ctr = new THREE.Vector3();
+        box.getCenter(ctr);
         
         const size = new THREE.Vector3();
         box.getSize(size);
         
-        // Centrar las geometrías en [0, 0, 0]
-        clone.position.x += (clone.position.x - center.x);
-        clone.position.y += (clone.position.y - center.y);
-        clone.position.z += (clone.position.z - center.z);
-        
-        // Escalar de forma proporcional para que encaje perfectamente en el viewport
         const maxDim = Math.max(size.x, size.y, size.z);
-        const targetSize = 2.8; // Tamaño objetivo adecuado en el Canvas
-        const scaleFactor = targetSize / (maxDim || 1);
+        const targetSize = 2.8; // Tamaño estándar en el Canvas
+        const scaleFactor = (targetSize / (maxDim || 1)) * model.scale;
         
-        // Aplicar la escala combinada con el modificador específico del modelo
-        clone.scale.setScalar(scaleFactor * model.scale);
-        
-        return clone;
+        return { center: ctr, scale: scaleFactor };
     }, [scene, model]);
 
-    return <primitive object={clonedScene} castShadow receiveShadow />;
+    return (
+        <group scale={scale}>
+            <primitive object={scene} position={[-center.x, -center.y, -center.z]} castShadow receiveShadow />
+        </group>
+    );
 };
 
 // Niebla y atmósfera de estudio para fondo claro
@@ -167,6 +167,7 @@ const Atmosphere = () => (
 );
 
 const Diorama3D = () => {
+    const { active, progress } = useProgress();
     const [activeIndex, setActiveIndex] = useState(0);
     const [autoRotate, setAutoRotate] = useState(true);
     const [showMarker, setShowMarker] = useState(false);
@@ -184,6 +185,9 @@ const Diorama3D = () => {
     return (
         <div style={{ minHeight: '100vh', background: COLORS.base, color: COLORS.paper, fontFamily: '"Public Sans", sans-serif', overflowX: 'hidden' }}>
             <style>{`@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');`}</style>
+
+            {/* Pantalla de carga global fuera del Canvas */}
+            <Loader active={active} progress={progress} />
 
             {/* Header overlay */}
             <header style={{
@@ -214,7 +218,7 @@ const Diorama3D = () => {
                     style={{ width: '100%', height: '100%' }}
                 >
                     <color attach="background" args={['#ffffff']} />
-                    <Suspense fallback={<Loader />}>
+                    <Suspense fallback={null}>
                         <Atmosphere />
                         {/* Render active model in carousel */}
                         <ModelRenderer model={activeModel} />
