@@ -1,6 +1,6 @@
 import React, { Suspense, useRef, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Text, Html, Stars } from '@react-three/drei';
+import { OrbitControls, Text, Html, Stars, useGLTF, useProgress } from '@react-three/drei';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Compass, Eye, Smartphone, ArrowLeft, Info, QrCode, Download, X, Camera } from 'lucide-react';
 
@@ -63,6 +63,114 @@ const HOTSPOTS = [
         body: 'En el Cementerio de Darwin descansan los caídos argentinos. Hasta 2017, decenas de tumbas tenían la inscripción "Soldado argentino solo conocido por Dios". Gracias al trabajo del Equipo Argentino de Antropología Forense, hoy muchas familias pueden ir a despedir a sus seres queridos.'
     }
 ];
+
+// Loader component
+const Loader = () => {
+    const { active, progress } = useProgress();
+    if (!active) return null;
+    return (
+        <Html center>
+            <div style={{
+                background: 'rgba(9,9,12,0.95)',
+                backdropFilter: 'blur(20px)',
+                padding: '2.5rem',
+                borderRadius: '24px',
+                border: `1px solid ${COLORS.deep}`,
+                color: COLORS.paper,
+                textAlign: 'center',
+                minWidth: '320px',
+                boxShadow: '0 20px 50px rgba(0,0,0,0.8)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                zIndex: 1000
+            }}>
+                <div style={{
+                    fontSize: '0.75rem',
+                    textTransform: 'uppercase',
+                    letterSpacing: '4px',
+                    color: COLORS.accent,
+                    fontWeight: 800,
+                    marginBottom: '1rem'
+                }}>
+                    Cargando Escena 3D
+                </div>
+                <div style={{
+                    fontFamily: '"Playfair Display", serif',
+                    fontSize: '1.8rem',
+                    fontStyle: 'italic',
+                    marginBottom: '1.5rem'
+                }}>
+                    {Math.round(progress)}%
+                </div>
+                <div style={{
+                    width: '100%',
+                    height: '6px',
+                    background: 'rgba(255,255,255,0.1)',
+                    borderRadius: '10px',
+                    overflow: 'hidden',
+                    marginBottom: '1rem'
+                }}>
+                    <div style={{
+                        width: `${progress}%`,
+                        height: '100%',
+                        background: `linear-gradient(90deg, ${COLORS.accent}, ${COLORS.sky})`,
+                        transition: 'width 0.3s ease-out'
+                    }} />
+                </div>
+                <div style={{ fontSize: '0.75rem', color: COLORS.sky, opacity: 0.8 }}>
+                    Cargando modelos pesados para una experiencia inmersiva...
+                </div>
+            </div>
+        </Html>
+    );
+};
+
+// Model components
+const ModelDiorama = () => {
+    const { scene } = useGLTF(`${import.meta.env.BASE_URL}models/malvinas_alvaro_saez_pascual_facundo_patane.glb`);
+    return <primitive object={scene} scale={0.8} position={[0, -0.2, 0]} castShadow receiveShadow />;
+};
+
+const ModelBackpack = () => {
+    const { scene } = useGLTF(`${import.meta.env.BASE_URL}models/alice_military_backpack_-_argentinean_army.glb`);
+    return <primitive object={scene} scale={0.7} position={[-2.2, -0.2, 1.8]} rotation={[0, 0.4, 0]} castShadow receiveShadow />;
+};
+
+const ModelPucara = () => {
+    const { scene } = useGLTF(`${import.meta.env.BASE_URL}models/argentine_fma_ia_58_pucara.glb`);
+    const ref = useRef();
+    useFrame((state) => {
+        if (ref.current) {
+            const t = state.clock.getElapsedTime() * 0.12;
+            ref.current.position.x = Math.sin(t) * 11;
+            ref.current.position.z = Math.cos(t) * 11;
+            ref.current.position.y = 4.2 + Math.sin(t * 2) * 0.4;
+            ref.current.rotation.y = t + Math.PI / 2;
+        }
+    });
+    return <primitive ref={ref} object={scene} scale={0.35} castShadow />;
+};
+
+const ModelMirage = () => {
+    const { scene } = useGLTF(`${import.meta.env.BASE_URL}models/mirage_malvinas.glb`);
+    const ref = useRef();
+    useFrame((state) => {
+        if (ref.current) {
+            const t = state.clock.getElapsedTime() * 0.18;
+            ref.current.position.x = Math.cos(t + Math.PI) * 13;
+            ref.current.position.z = Math.sin(t + Math.PI) * 13;
+            ref.current.position.y = 5.2 + Math.cos(t * 2) * 0.4;
+            ref.current.rotation.y = t - Math.PI / 2;
+        }
+    });
+    return <primitive ref={ref} object={scene} scale={0.35} castShadow />;
+};
+
+const ModelUnknown = () => {
+    const { scene } = useGLTF(`${import.meta.env.BASE_URL}models/40001f96-0002-fd00-b63f-84710c7967bb.glb`);
+    return <primitive object={scene} scale={1.2} position={[2.2, -0.2, -1.8]} castShadow receiveShadow />;
+};
 
 // 🌍 Plataforma del diorama (las islas)
 const Island = () => (
@@ -220,15 +328,19 @@ const Diorama3D = () => {
                 style={{ width: '100vw', height: '100vh' }}
             >
                 <color attach="background" args={[COLORS.base]} />
-                <Suspense fallback={null}>
+                <Suspense fallback={<Loader />}>
                     <Atmosphere />
-                    <Island />
+                    <ModelDiorama />
+                    <ModelBackpack />
+                    <ModelPucara />
+                    <ModelMirage />
+                    <ModelUnknown />
                     {HOTSPOTS.map(h => (
                         <Hotspot key={h.id} data={h} onSelect={(d) => { setSelected(d.id); setInfo(d); }} selected={selected === h.id} />
                     ))}
                     {/* Cartel central */}
                     <Text
-                        position={[0, 3, 0]}
+                        position={[0, 4.5, 0]}
                         fontSize={0.5}
                         color={COLORS.paper}
                         anchorX="center"
@@ -239,7 +351,7 @@ const Diorama3D = () => {
                         ATLÁNTICO SUR
                     </Text>
                     <Text
-                        position={[0, 2.55, 0]}
+                        position={[0, 4.05, 0]}
                         fontSize={0.22}
                         color={COLORS.accent}
                         anchorX="center"
@@ -404,5 +516,11 @@ const Diorama3D = () => {
         </div>
     );
 };
+
+useGLTF.preload(`${import.meta.env.BASE_URL}models/malvinas_alvaro_saez_pascual_facundo_patane.glb`);
+useGLTF.preload(`${import.meta.env.BASE_URL}models/alice_military_backpack_-_argentinean_army.glb`);
+useGLTF.preload(`${import.meta.env.BASE_URL}models/argentine_fma_ia_58_pucara.glb`);
+useGLTF.preload(`${import.meta.env.BASE_URL}models/mirage_malvinas.glb`);
+useGLTF.preload(`${import.meta.env.BASE_URL}models/40001f96-0002-fd00-b63f-84710c7967bb.glb`);
 
 export default Diorama3D;
