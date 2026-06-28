@@ -13,7 +13,7 @@ const COLORS = {
     paper: '#f0ece5'
 };
 
-// Datos de los modelos 3D y su información histórica
+// Datos de los modelos 3D y su información histórica (LFS tracked)
 const MODELS = [
     {
         id: 'diorama',
